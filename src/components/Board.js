@@ -1,9 +1,50 @@
 import { useState } from "react";
 import Button from "./buttons";
 
-function Board() {
-    const [xIsNext, setIsNext] = useState(true);
-    const [buttons, setButtons] = useState(Array(9).fill(null));
+function Board({xIsNext, buttons, onPlay}) {
+    function handleClick(i){
+        if(buttons[i] || calculateWinner(buttons)){
+            return;
+        }
+        const nextButtons = buttons.slice();
+        if(xIsNext){
+            nextButtons[i] = 'X';
+        }else{
+            nextButtons[i] = 'O';
+        }
+        onPlay(nextButtons);
+    }
+
+    const winner = calculateWinner(buttons);
+    let status;
+    if(winner){
+        status = "Winner: "+ winner;
+    }else{
+        status = "Next Player: " + (xIsNext ? "X" : "O");
+    }
+
+    return (
+        <>
+            <div className="status">{ status }</div>
+            <div className = "board-row">
+                <Button onButtonClick={ () => handleClick(0) } value = { buttons[0] } />
+                <Button onButtonClick={ () => handleClick(1) } value = { buttons[1] }  />
+                <Button onButtonClick={ () => handleClick(2) } value = { buttons[2] }  />
+            </div>
+            <div className = "board-row">
+                <Button onButtonClick={ () => handleClick(3) } value = { buttons[3] }  />
+                <Button onButtonClick={ () => handleClick(4) } value = { buttons[4] }  />
+                <Button onButtonClick={ () => handleClick(5) } value = { buttons[5] }  />
+            </div>
+            <div className = "board-row">
+                <Button onButtonClick={ () => handleClick(6) } value = { buttons[6] }  />
+                <Button onButtonClick={ () => handleClick(7) } value = { buttons[7] }  />
+                <Button onButtonClick={ () => handleClick(8) } value = { buttons[8] }  />
+            </div>
+        </>
+    );
+}
+
 
     
     // logic to calculate winner
@@ -27,55 +68,63 @@ function Board() {
         return null;
     }
 
-    const winner = calculateWinner(buttons);
-    let status;
-    if(winner){
-        status = "Winner: "+ winner;
-    }else{
-        status = "Next Player: " + (xIsNext ? "X" : "O");
+
+
+function Game(){
+    // const [xIsNext, setIsNext] = useState(true);
+    const [history, setHistory] = useState([Array(9).fill(null)]);
+    const [currentMove, setCurrentMove] = useState(0);
+    const currentButtons = history[currentMove];
+    const xIsNext = currentMove % 2 === 0;
+
+    function handlePlay(nextButtons){
+        const nextHistory = [...history.slice(0, currentMove + 1), nextButtons];
+        setHistory(nextHistory);
+        setCurrentMove(nextHistory.length - 1);
+        // setHistory([...history, nextButtons]);
+        // setIsNext(!xIsNext);
     }
 
-    function handleClick(i){
-        // not allowed to click on same square
-        if(buttons[i] || calculateWinner(buttons)){
-            return;
-        }
-        const nextButtons = buttons.slice();
-        // changing X and O for flipping players
-        if(xIsNext){
-            nextButtons[i] = 'X';
+
+    function jumpTo(nextMove){
+        setCurrentMove(nextMove);
+        // setIsNext(nextMove % 2 === 0);
+    }
+
+    const moves = history.map((buttons, move) => {
+        let description;
+
+        if(move > 0){
+            description = "Go to move #" + move;
         }else{
-            nextButtons[i] = 'O';
+            description = "Go to game start";
         }
-        // for setting value
-        setButtons(nextButtons);
 
-        // for setting xIsNext in true or false this will help above logic to perform
-        setIsNext(!xIsNext);
-    }
+        return (
+            <li key = { move }>
+                <button onClick = { () => jumpTo(move) }>
+                    { description }
+                </button>
+            </li>
+        )
+    });
+
     return (
         <>
-
-            <div className="status">{ status }</div>
-            <div className = "board-row">
-                <Button onButtonClick={ () => handleClick(0) } value = { buttons[0] } />
-                <Button onButtonClick={ () => handleClick(1) } value = { buttons[1] }  />
-                <Button onButtonClick={ () => handleClick(2) } value = { buttons[2] }  />
-            </div>
-            <div className = "board-row">
-                <Button onButtonClick={ () => handleClick(3) } value = { buttons[3] }  />
-                <Button onButtonClick={ () => handleClick(4) } value = { buttons[4] }  />
-                <Button onButtonClick={ () => handleClick(5) } value = { buttons[5] }  />
-            </div>
-            <div className = "board-row">
-                <Button onButtonClick={ () => handleClick(6) } value = { buttons[6] }  />
-                <Button onButtonClick={ () => handleClick(7) } value = { buttons[7] }  />
-                <Button onButtonClick={ () => handleClick(8) } value = { buttons[8] }  />
+            <div className="game">
+                <div>
+                    <Board xIsNext = { xIsNext } buttons = { currentButtons }  onPlay = { handlePlay } />
+                </div>
+                <div className="history">
+                    <div className="title">History</div>
+                    <ol>{ moves }</ol>
+                </div>
             </div>
         </>
-    );
+    );  
+
 }
 
 
 
-export default Board;
+export default Game;

@@ -8,6 +8,14 @@ body{
   align-items: center;
 }
 
+
+.game{
+  width: 80vw;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
 .status{
   display: flex;
   justify-content: center;
@@ -15,6 +23,25 @@ body{
   font-size: 25px;
   margin-bottom: 25px;
 }
+
+.history{
+  font-size: 25px;
+  color: white;
+}
+
+.title{
+  font-size: 30px;
+  text-align: center;
+}
+
+.history ol li button{
+  border-radius: 5px;
+  height: 40px;
+  width: 200px;
+  background-color: rgb(131, 195, 251);
+  /* font-size: 25px; */
+}
+
 
 .board-row{
   display: flex;
