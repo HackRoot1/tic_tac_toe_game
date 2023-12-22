@@ -81,14 +81,14 @@ function Game(){
         const nextHistory = [...history.slice(0, currentMove + 1), nextButtons];
         setHistory(nextHistory);
         setCurrentMove(nextHistory.length - 1);
-        // setHistory([...history, nextButtons]);
-        // setIsNext(!xIsNext);
     }
 
 
     function jumpTo(nextMove){
         setCurrentMove(nextMove);
-        // setIsNext(nextMove % 2 === 0);
+        if(nextMove === 0){
+            setCurrentMove(nextMove);
+        }
     }
 
     const moves = history.map((buttons, move) => {
@@ -112,6 +112,14 @@ function Game(){
     return (
         <>
             <div className="game">
+                <div className="title">
+                    <div>
+                        <button className="btn" onClick = { () => jumpTo(0) }>
+                            Replay
+                        </button>
+                    </div>
+                </div>
+
                 <div>
                     <Board xIsNext = { xIsNext } buttons = { currentButtons }  onPlay = { handlePlay } />
                 </div>
