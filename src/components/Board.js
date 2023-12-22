@@ -71,7 +71,6 @@ function Board({xIsNext, buttons, onPlay}) {
 
 
 function Game(){
-    // const [xIsNext, setIsNext] = useState(true);
     const [history, setHistory] = useState([Array(9).fill(null)]);
     const [currentMove, setCurrentMove] = useState(0);
     const currentButtons = history[currentMove];
