@@ -2,6 +2,7 @@ import { useState } from "react";
 import Button from "./buttons";
 
 function Board({xIsNext, buttons, onPlay}) {
+
     function handleClick(i){
         if(buttons[i] || calculateWinner(buttons)){
             return;
@@ -87,6 +88,7 @@ function Game(){
         setCurrentMove(nextMove);
         if(nextMove === 0){
             setCurrentMove(nextMove);
+            setHistory([Array(9).fill(null)]);
         }
     }
 
