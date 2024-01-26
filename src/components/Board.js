@@ -121,11 +121,13 @@ function Game(){
                     </div>
                 </div>
 
-                <div>
+                <div className="board-design">
                     <Board xIsNext = { xIsNext } buttons = { currentButtons }  onPlay = { handlePlay } />
                 </div>
+
+
                 <div className="history">
-                    <div className="title">History</div>
+                    <div>History</div>
                     <ol>{ moves }</ol>
                 </div>
             </div>
